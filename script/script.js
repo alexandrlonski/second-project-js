@@ -47,16 +47,38 @@ window.addEventListener('DOMContentLoaded', function() {
   const toggleMenu = () => {
      
      const btnMenu = document.querySelector('.menu'),
-           menu = document.querySelector('menu'),
-           closeBtn = document.querySelector('.close-btn'),
-           menuItems = menu.querySelectorAll('ul>li');
+           menu = document.querySelector('menu');
+           
 
      const handlermenu = () => {
        menu.classList.toggle('active-menu');
      };      
-     btnMenu.addEventListener('click', handlermenu);
-     closeBtn.addEventListener('click', handlermenu);
-     menuItems.forEach((elem) => elem.addEventListener('click', handlermenu));
+     btnMenu.addEventListener('click', (event) => {
+       let target = event.target;
+        if(target.closest('.menu')){
+         handlermenu();
+       }
+     });
+   
+     menu.addEventListener('click', (event) => {
+       let target = event.target;
+       if(target.matches('a')){
+         handlermenu();
+       } else {
+         clickOther();
+       }
+       
+     });
+
+     const clickOther = () => {
+       document.addEventListener('click', (event) => {
+        let target = event.target;
+        if(menu.classList.contains('active-menu') && !target.matches('menu')){
+
+        }
+     });
+    };
+
   };
 
   toggleMenu();
@@ -64,8 +86,7 @@ window.addEventListener('DOMContentLoaded', function() {
   // popup
   const togglePopup = () => {
     const popup = document.querySelector('.popup'),
-          popupBtn = document.querySelectorAll('.popup-btn'),
-          popupClose = document.querySelector('.popup-close');
+          popupBtn = document.querySelectorAll('.popup-btn');
     let   popupContent = document.querySelector('.popup-content'),
           count =100;
           let popupRight = function() {
@@ -79,30 +100,71 @@ window.addEventListener('DOMContentLoaded', function() {
           popupBtn.forEach((elem) => {
             elem.addEventListener('click', popupRight );
            });
-        
-          popupClose.addEventListener('click', () => {
-             popup.style.display = 'none';
-             count = 100;
-          }); 
+
+          popup.addEventListener('click', (event) => {
+              let target = event.target;
+              if(target.classList.contains('popup-close')){
+                popup.style.display = 'none';
+                 count = 100;
+              } else {
+                target = target.closest('.popup-content');
+              if(!target){
+                popup.style.display = 'none';
+                count = 100;
+              } 
+              }
+                     
+          } );
   };
   
   togglePopup();
-  console.log(screen.width);
-
+  
   // scroll
-
-
   const anchors = document.querySelectorAll('a[href*="#"]')
 
-for (let anchor of anchors) {
-  anchor.addEventListener('click', function (elem) {
-    elem.preventDefault();
-    const blockID = anchor.getAttribute('href').substr(1);
-    document.getElementById(blockID).scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-  });
+     for (let anchor of anchors) {
+       anchor.addEventListener('click', function (elem) {
+         elem.preventDefault();
+         const blockID = anchor.getAttribute('href').substr(1);
+         document.getElementById(blockID).scrollIntoView({
+           behavior: 'smooth',
+           block: 'start'
+         });
+       });
+  }
+
+//  tabs
+const tabs = () => {
+  const tabHeader = document.querySelector('.service-header'),
+        tab = tabHeader.querySelectorAll('.service-header-tab'),
+        tabContent = document.querySelectorAll('.service-tab');
+  const toggleTabContent = (index) => {
+  for(let i = 0; i < tabContent.length; i++) {
+       if(index === i){
+         tab[i].classList.add('active');
+         tabContent[i].classList.remove('d-none');
+       } else {
+         tab[i].classList.remove('active');
+         tabContent[i].classList.add('d-none');
+       } 
+  }
+  };
+        tabHeader.addEventListener('click', (event) => {
+            let target = event.target;
+                target = target.closest('.service-header-tab');
+              
+            if(target) {
+              tab.forEach((item, i) => {
+                if(item === target){
+                  toggleTabContent(i);
+                }
+              });
+            }
+        });
+        
 }
+tabs();
+
+
 
 });
