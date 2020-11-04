@@ -45,40 +45,36 @@ window.addEventListener('DOMContentLoaded', function() {
 
   //  menu
   const toggleMenu = () => {
-     
-     const btnMenu = document.querySelector('.menu'),
-           menu = document.querySelector('menu');
+    // доп задание урок 20
+     const menu = document.querySelector('menu');
            
-
      const handlermenu = () => {
        menu.classList.toggle('active-menu');
-     };      
-     btnMenu.addEventListener('click', (event) => {
-       let target = event.target;
-        if(target.closest('.menu')){
-         handlermenu();
-       }
-     });
-   
-     menu.addEventListener('click', (event) => {
-       let target = event.target;
-       if(target.matches('a')){
-         handlermenu();
-       } else {
-         clickOther();
-       }
-       
-     });
-
-     const clickOther = () => {
-       document.addEventListener('click', (event) => {
+     };  
+     document.addEventListener('click', (event) => {
         let target = event.target;
-        if(menu.classList.contains('active-menu') && !target.matches('menu')){
 
-        }
+        if(target.closest('.menu') || (menu.classList.contains('active-menu') && target.matches('a')) 
+        || (menu.classList.contains('active-menu') && !target.matches('menu'))){
+         handlermenu();
+       } 
      });
-    };
-
+    //  Осноное задание урок 20
+    // const btnMenu = document.querySelector('.menu');
+    //  btnMenu.addEventListener('click', (event) => {
+    //    let target = event.target;
+    //     if(target.closest('.menu')){
+    //      handlermenu();
+    //    }
+    //  });
+    //  menu.addEventListener('click', (event) => {
+    //    let target = event.target;
+    //    if(target.matches('a')){
+    //      handlermenu();
+    //    } else {
+    //      clickOther();
+    //    }    
+    //  });
   };
 
   toggleMenu();
@@ -120,6 +116,7 @@ window.addEventListener('DOMContentLoaded', function() {
   togglePopup();
   
   // scroll
+  const scroll = () => {
   const anchors = document.querySelectorAll('a[href*="#"]')
 
      for (let anchor of anchors) {
@@ -132,6 +129,8 @@ window.addEventListener('DOMContentLoaded', function() {
          });
        });
   }
+};
+scroll();
 
 //  tabs
 const tabs = () => {
