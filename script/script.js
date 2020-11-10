@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', function() {
     updateClock(); 
     let timerId = setInterval( updateClock, 1000); 
  }  
-  countTimer('10 november 2020');
+  countTimer('22 november 2020');
   
 
   //  menu
@@ -219,9 +219,9 @@ const slider = () => {
     slider.addEventListener('click', (event) => {
        event.preventDefault();
        let target = event.target;
-      //  if(!target.matches('.dot, .portfolio-btn')){
-      //    return;
-      //  }
+       if(!target.matches('.dot, .portfolio-btn')){
+         return;
+       }
        prevSlide(slide, currentSlide, 'portfolio-item-active');
        prevSlide(dot, currentSlide, 'dot-active');
        
@@ -263,6 +263,37 @@ const slider = () => {
 };
 slider();
 
+const changePhoto = () => {
+const img = document.querySelectorAll('.command__photo');
+  
+  img.forEach((elem, index, arr) => {
+    let imgOld = img[index].src ;
+   img[index].addEventListener('mouseover', (event) => {
+     event.target.src = event.target.dataset.img;
+   });
+   
+   img[index].addEventListener('mouseout', (event) => {
+     event.target.src = imgOld;
+   });
+})
+};
+changePhoto();
 
+const inputEnter = () => {
+  const inputSquare = document.querySelector('.calc-square'),
+        inputCount = document.querySelector('.calc-count'),
+        inputDay = document.querySelector('.calc-day');
+
+       inputSquare.addEventListener('input', () => {
+         inputSquare.value = inputSquare.value.replace(/\D/g, '');
+       }) 
+       inputCount.addEventListener('input', () => {
+         inputCount.value = inputCount.value.replace(/\D/g, '');
+       }) 
+       inputDay.addEventListener('input', () => {
+         inputDay.value = inputDay.value.replace(/\D/g, '');
+       }) 
+};
+inputEnter();
 
 });
