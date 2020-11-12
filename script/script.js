@@ -293,12 +293,14 @@ const calc = (price = 100) => {
         calcSquare = document.querySelector('.calc-square'),
         calcDay= document.querySelector('.calc-day'),
         calcCount= document.querySelector('.calc-count'),
-        totalValue = document.getElementById('total');  
+        totalValue = document.getElementById('total'); 
+    
         
    const countSum = () => {
       let total = 0,
           countValue = 1,
-          dayValue = 1;
+          dayValue = 1,
+          count = 0; 
       const typeValue = calcType.options[calcType.selectedIndex].value,
             squareValue = +calcSquare.value;
 
@@ -313,11 +315,27 @@ const calc = (price = 100) => {
       }
             
       if(typeValue && squareValue)  {
-        total = price * typeValue * squareValue * countValue * dayValue ;
+        total = price * typeValue * squareValue * countValue * dayValue;
       }
-      totalValue.textContent = total;
-   
-    }
+      let totalNum = Math.floor(total);
+      let interval;
+      
+      let numberUp = () => {
+          count += 100;
+          if(count <= totalNum){
+            totalValue.textContent = count;
+            interval = setTimeout(numberUp, 1);
+          } else {
+            clearTimeout(interval);
+            count = 0;
+          }
+        };
+        numberUp();
+    };
+
+ 
+    
+
      calcBlock.addEventListener('change', (event) => {
          const target = event.target;
         //  if(target.matches('.calc-type') || target.matches('.calc-square') || 
