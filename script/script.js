@@ -353,4 +353,73 @@ const calc = (price = 100) => {
 
 };
 calc(100);
+
+// send-ajax-form
+const sendForm = () => {
+   const errorMessage = 'Что то пошло не так',
+         loadMessage = 'Загрузка... ',
+         successMessage = 'Спасибо! Мы скоро с вами свяжемся!', 
+         allForm = document.querySelectorAll('form'),
+         inputPhone = document.querySelectorAll('.form-phone'),
+         inputName = document.querySelectorAll('[name=user_name], [name=user_message]'),
+         statusMessage = document.createElement('div');
+         statusMessage.style.cssText = 'font-size: 2rem; color: green;';
+
+         inputName.forEach((elem) => {
+             elem.addEventListener('input', () => {
+               elem.value = elem.value.replace(/[^а-яё\s]/ig, '');
+               });
+             });
+
+         inputPhone.forEach((elem) => {
+             elem.addEventListener('input', () => {
+               elem.value = elem.value.replace(/[^0-9+]/ig, '');
+               });
+             });
+
+         allForm.forEach((form) => {
+            form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            form.appendChild(statusMessage);
+            statusMessage.textContent = loadMessage;
+            const formData = new FormData(form);
+            let body = {};
+            // for(let val of formData.entries()){
+            //   body[val[0]] = val[1]
+            // }
+            formData.forEach((val, key) => {
+              body[key] = val;
+            });
+            postData(body, () => {
+             const inputs = form.querySelectorAll('input');
+               statusMessage.textContent = successMessage;
+               inputs.forEach((elem) => {
+                 elem.value = '';
+               });
+            }, (error) => {
+               statusMessage.textContent = errorMessage;
+               console.error(error);
+            });
+            });
+         });
+
+        const postData = (body, outputData, errorData) => {
+          const request = new XMLHttpRequest();
+            request.addEventListener('readystatechange', () => {
+                if(request.readyState !== 4) {
+                  return;
+                }
+                if(request.status === 200) {
+                  outputData();
+                } else {
+                  errorData(request.status);
+                }
+            });
+            request.open('POST', './server.php');
+            request.setRequestHeader('Content-Type', 'application/json');
+            console.log(body);
+            request.send(JSON.stringify(body));
+        }       
+};
+sendForm();
 });
