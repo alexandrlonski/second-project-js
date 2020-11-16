@@ -361,6 +361,7 @@ const sendForm = () => {
          allForm = document.querySelectorAll('form'),
          inputPhone = document.querySelectorAll('.form-phone'),
          inputName = document.querySelectorAll('[name=user_name], [name=user_message]'),
+         inputEmail = document.querySelectorAll('[name=user_email]'),
          statusMessage = document.createElement('div');
 
     const applyStyle = () => {
@@ -453,6 +454,11 @@ const sendForm = () => {
                elem.value = elem.value.replace(/[^0-9+]/ig, '');
                });
              });
+         inputEmail.forEach((elem) => {
+             elem.addEventListener('input', () => {
+               elem.value = elem.value.replace(/[а-яё\s\f]/ig, '');
+               });
+             });     
 
          allForm.forEach((form) => {
             form.addEventListener('submit', (e) => {
@@ -486,6 +492,7 @@ const sendForm = () => {
                statusMessage.textContent = errorMessage;
                console.error(error);
             });
+            setTimeout(() => {statusMessage.textContent = '';} , 6000)
             });
          });
 
@@ -503,7 +510,6 @@ const sendForm = () => {
             });
             request.open('POST', './server.php');
             request.setRequestHeader('Content-Type', 'application/json');
-            console.log(body);
             request.send(JSON.stringify(body));
         }       
 };
