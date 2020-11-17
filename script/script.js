@@ -117,8 +117,7 @@ window.addEventListener('DOMContentLoaded', function() {
   
   // scroll
   const scroll = () => {
-  const anchors = document.querySelectorAll('a[href*="#"]')
-
+  const anchors = document.querySelectorAll('ul li a[href*="#"], [href="#servise-block"]');
      for (let anchor of anchors) {
        anchor.addEventListener('click', function (elem) {
          elem.preventDefault();
@@ -480,14 +479,16 @@ const sendForm = () => {
             formData.forEach((val, key) => {
               body[key] = val;
             });
-            postData(body, () => {
+            postData(body)
+            .then(() => {
              const inputs = form.querySelectorAll('input');
              statusMessage.style.cssText = 'font-size: 2rem; color: #19b5fe;';
                statusMessage.textContent = successMessage;
                inputs.forEach((elem) => {
                  elem.value = '';
                });
-            }, (error) => {
+            })
+            .catch((error) => {
               statusMessage.style.cssText = 'font-size: 2rem; color: red;';
                statusMessage.textContent = errorMessage;
                console.error(error);
@@ -496,21 +497,24 @@ const sendForm = () => {
             });
          });
 
-        const postData = (body, outputData, errorData) => {
-          const request = new XMLHttpRequest();
+        const postData = (body) => {
+          return new Promise((resolve, reject) => {
+            const request = new XMLHttpRequest();
             request.addEventListener('readystatechange', () => {
                 if(request.readyState !== 4) {
                   return;
                 }
                 if(request.status === 200) {
-                  outputData();
+                  resolve();
                 } else {
-                  errorData(request.status);
+                  reject(request.status);
                 }
             });
             request.open('POST', './server.php');
             request.setRequestHeader('Content-Type', 'application/json');
             request.send(JSON.stringify(body));
+          });
+          
         }       
 };
 sendForm();
