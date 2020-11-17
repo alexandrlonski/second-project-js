@@ -451,7 +451,7 @@ const sendForm = () => {
 
          inputPhone.forEach((elem) => {
              elem.addEventListener('input', () => {
-               elem.value = elem.value.replace(/[^0-9+]/ig, '');
+               elem.value = elem.value.replace(/[^0-9+]|[0-9]{13}$/ig, '');
                });
              });
          inputEmail.forEach((elem) => {
