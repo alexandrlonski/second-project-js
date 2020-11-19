@@ -3,7 +3,8 @@ const sendForm = () => {
          successMessage = 'Спасибо! Мы скоро с вами свяжемся!', 
          allForm = document.querySelectorAll('form'),
          inputsPhone = document.querySelectorAll('.form-phone'),
-         inputsName = document.querySelectorAll('[name=user_name], [name=user_message]'),
+         inputsName = document.querySelectorAll('[name=user_name]'),
+         inputMessage = document.querySelector('[name=user_message]'),
          inputsEmail = document.querySelectorAll('[name=user_email]'),
          statusMessage = document.createElement('div');
 
@@ -102,29 +103,37 @@ const sendForm = () => {
              elem.addEventListener('input', () => {
                elem.value = elem.value.replace(/[а-яё\s\f]/ig, '');
                });
-             });     
-
+             }); 
+             
          allForm.forEach((form) => {
-            
-              
+         
             form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const inputPhone = form.querySelector('.form-phone');
-            const inputsForm = form.querySelectorAll('input');
+            const inputPhone = form.querySelector('.form-phone'),
+                  inputEmail = form.querySelector('.form-email'),
+                  inputsForm = form.querySelectorAll('input');
             let input;
             inputsForm.forEach((item) =>{
               if(item.value === ''){
                  return input = '';
-                 
               }
             }) 
             console.log(input);
-              if(!inputPhone.value.match(/[0-9+]{7,13}/ig)) {
-                 alert('Номер введен не верно');
-                 return;
-               } else if(input === ''){ //|| inputsForm[1].value === '' || inputsForm[2].value === '' ) {
-                 alert('заполните все поля');
-                  return;
+              if(!inputPhone.value.match(/^[\+]?[0-9]{7,13}$/ig)) {
+                  //  inputPhone.style.border = ("1px solid red");
+                   alert('Номер введен не верно');
+                   return;
+               } else if(!inputEmail.value.match(/\w+@\w+\.\w{2,3}/ig)) {
+                  // inputEmail.style.border = ("1px solid red");
+                   alert('E-mail введен не верно');
+                   return;
+               } else if(input === ''){ 
+                   alert('заполните все поля');
+                   return;
+               } else {
+                 inputPhone.style.border = ("none");
+                 inputEmail.style.border = ("none");
+
                }
             form.appendChild(statusMessage);
             statusMessage.innerHTML = `<div class='sk-wave'>
@@ -135,10 +144,7 @@ const sendForm = () => {
                                          <div class='sk-rect sk-rect-5'></div>
                                        </div>`;
             applyStyle(); 
-            
-             if(!inputPhone.value.match(/[0-9+]{7,13}/ig)) {
-                 alert('Номер введен не верно');
-               };                          
+                          
             const formData = new FormData(form);
             let body = {};
             formData.forEach((val, key) => {
@@ -161,7 +167,9 @@ const sendForm = () => {
                statusMessage.textContent = errorMessage;
                console.error(error);
             });
-            setTimeout(() => {statusMessage.textContent = '';} , 6000)
+            setTimeout(() => {statusMessage.textContent = ''} , 6000);
+            const popup = document.querySelector('.popup');
+            setTimeout(() => {popup.style.display = 'none'} , 8000);
             });
          });
 
