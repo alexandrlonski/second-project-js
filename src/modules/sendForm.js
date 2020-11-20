@@ -118,7 +118,6 @@ const sendForm = () => {
                  return input = '';
               }
             }) 
-            console.log(input);
               if(!inputPhone.value.match(/^[\+]?[0-9]{7,13}$/ig)) {
                   //  inputPhone.style.border = ("1px solid red");
                    alert('Номер введен не верно');
